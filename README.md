@@ -1,234 +1,236 @@
-# PredictChurn — Customer Churn Intelligence System
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=140&text=PredictChurn&desc=Customer%20Churn%20Intelligence&animation=fadeIn" width="100%"/>
 
-PredictChurn is an end-to-end, production-grade churn intelligence web application designed to help businesses detect customer attrition early, understand the exact factors driving churn, and take automated retention actions.
+  # PredictChurn
 
-- 🐍 **ML Backend:** Python · FastAPI · XGBoost 3.x · SHAP TreeExplainer · SMOTE · Scikit-Learn
-- ⚡ **Web Frontend:** Next.js 14 (App Router) · TypeScript (Strict) · Tailwind CSS · Zustand
-- 📊 **Dataset:** IBM Telco Customer Churn (7,043 customers, 20 feature columns)
-- 🎨 **Visual Identity:** "Signal" (Warm Paper `#F4F1EA` & Night Desk `#0E0F0C`, Risk Spectrum colors, Instrument Serif display typography)
+  > Detect customer churn early, explain why it happens with SHAP, and trigger retention actions.
 
----
+  [![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+  [![XGBoost](https://img.shields.io/badge/XGBoost_3.x-EB5424?style=for-the-badge&logo=xgboost&logoColor=white)](https://xgboost.readthedocs.io/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.843-success?style=for-the-badge)](https://github.com/FLASH11025/customer-retention-system)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-## 📸 Visual Walkthrough & System Architecture
-
-### 1. Overview & Conversion Hub (`/`)
-
-![Overview Landing Page](docs/screenshots/01_overview.png)
-
-#### Purpose:
-The landing section serves as the primary executive cockpit and value-proposition center. It provides immediate high-level awareness of the system's current trained model state, model accuracy, and real-time retention ROI.
-
-#### How It Works:
-- **Live Model Polling:** On mount, the component queries `GET /metrics` via the typed client (`lib/api.ts`).
-- **Telemetry Verification:** If a model is active, it displays the algorithm (`XGBoost`), overall ROC-AUC (`0.843`), Accuracy (`77.29%`), and cross-validated stability scores.
-- **Dynamic Routing:** Offers one-click primary call-to-actions (CTAs) directing users to either retrain a model on new telemetry or score a fresh customer cohort.
+  <br><br>
+  <img src="docs/screenshots/01_overview.png" alt="PredictChurn Hero" width="90%"/>
+</div>
 
 ---
 
-### 2. Dataset Ingestion & Validation (`/upload`)
+### 💡 Why PredictChurn
 
-![Dataset Ingestion & Validation](docs/screenshots/02_upload.png)
-
-#### Purpose:
-Enables dual-mode file ingestion: **Train Mode** (trains and tunes a new machine learning model) and **Score Mode** (runs bulk inference on customer accounts).
-
-#### How It Works:
-- **Client-Side CSV Validation:** `lib/csv.ts` parses and inspects incoming CSV headers in the browser before upload, confirming all 20 required Telco features (`Contract`, `tenure`, `MonthlyCharges`, `PaymentMethod`, etc.) and the target `churned` column (for training).
-- **Multipart Streaming:** Dispatches multipart form data to `POST /train` or `POST /predict?threshold=0.5`.
-- **Live Preview:** Displays the first 5 records in a tabular preview with data-type badges and row counts.
-- **Template Generation:** Provides one-click downloads of validated training sample CSVs and scoring templates directly from FastAPI (`/sample-csv` and `/template-csv`).
+Customer attrition quietly bleeds recurring revenue before account managers spot warning signs. PredictChurn bridges production machine learning with customer success operations by predicting churn probability and quantifying exact revenue exposure. Teams receive explainable local SHAP drivers and targeted retention playbooks to intervene before customers leave.
 
 ---
 
-### 3. Data Health & Cleaning Audit (`/data-health`)
+### ✨ Key Features
 
-![Data Health & Cleaning Audit](docs/screenshots/03_data_health.png)
-
-#### Purpose:
-Ensures complete transparency into data pre-processing, data sanitization, and class balancing prior to model training.
-
-#### How It Works:
-- **Cleaning Pipeline Audit:** Displays metrics returned in `metrics.cleaning`:
-  - `rows_in` vs `rows_out`
-  - Duplicate customer records identified and purged
-  - Missing value imputation summary (e.g. `TotalCharges` median imputation for new tenures)
-  - String sanitization (stripping quotation marks from OpenML categoricals)
-- **Class Balance (SMOTE):** Displays the raw churn imbalance ratio (e.g., 73.5% Stay vs 26.5% Churn) and the synthetic oversampling applied by SMOTE during training to prevent majority-class bias.
+- **Automated CSV Ingestion (`/upload`):** In-browser header validation with dual-mode support for model retraining or cohort scoring.
+- **Data Health & SMOTE Audit (`/data-health`):** Transparent record auditing, missing-value imputation, and synthetic oversampling for class balance.
+- **Dynamic Threshold Calibration (`/model`):** Real-time client-side confusion matrix, ROC curve, and F1 recalculation across decision thresholds.
+- **Executive Risk Radar (`/radar`):** Financial exposure tracking with live revenue-at-risk aggregation and risk-tier segmentation.
+- **Customer Intelligence Table (`/customers`):** Searchable, filterable account roster with risk badges and full CRM-ready CSV export.
+- **Explainable SHAP Dossiers (`/customers/[id]`):** Local TreeSHAP attribution translating raw feature weights into clear root-cause sentences.
+- **Interactive What-If Simulator (`/simulator`):** Real-time single-account scenario testing with immediate probability feedback.
+- **Actionable Retention Playbook (`/playbook`):** Kanban workspace organizing accounts into intervention tiers with revenue at stake.
 
 ---
 
-### 4. Model Evaluation & Dynamic Thresholding (`/model`)
+### 📸 Screenshots Gallery
 
-![Model Evaluation & Dynamic Threshold](docs/screenshots/04_model_evaluation.png)
-
-#### Purpose:
-Provides deep diagnostic visibility into the classifier's performance and allows operators to adjust decision thresholds interactively.
-
-#### How It Works:
-- **Interactive Threshold Slider:** Allows operators to slide the classification threshold between `0.05` and `0.95`.
-- **Client-Side Re-computation:** Using `lib/metrics.ts`, the frontend iterates over the held-out test cohort probabilities (`metrics.test_probabilities`) in real-time ($O(N)$ execution), recalculating:
-  - Confusion Matrix ($TN, FP, FN, TP$)
-  - Precision, Recall, and $F_1$ Score
-  - Trade-off indicator showing optimal $F_1$ threshold
-- **ROC Curve:** SVG visualization plotting True Positive Rate (Sensitivity) vs False Positive Rate ($1 - \text{Specificity}$) with area-under-curve score.
-
----
-
-### 5. Risk Radar Dashboard (`/radar`)
-
-![Risk Radar Executive Dashboard](docs/screenshots/05_risk_radar.png)
-
-#### Purpose:
-High-level strategic command center summarizing aggregate churn exposure across an entire customer cohort.
-
-#### How It Works:
-- **Revenue at Risk Calculation:** Computed dynamically as:
-  $$\text{Revenue at Risk} = \sum_{i \in \text{Predicted Churners}} (\text{MonthlyCharges}_i \times 12)$$
-- **KPI Bento Grid:** Displays Total Accounts, Predicted to Leave count, Average Churn Risk %, and High-Risk accounts.
-- **Risk Distribution Histogram:** Bins customer probabilities into calibrated risk buckets:
-  - 🟢 **Safe:** $0\% - 35\%$
-  - 🟡 **Watch:** $35\% - 65\%$
-  - 🔴 **Danger:** $65\% - 100\%$
-
----
-
-### 6. Customer Intelligence Table (`/customers`)
-
-![Customer Intelligence Table](docs/screenshots/06_customer_intelligence.png)
-
-#### Purpose:
-Granular customer-by-customer database featuring search, multi-factor filtering, risk badge categorization, and export capabilities.
-
-#### How It Works:
-- **Filtering & Search:** Real-time search across Customer IDs and multi-select filtering across Contract types, Payment Methods, and Risk Tiers.
-- **Risk Badging:** Uses `components/ui/Badge.tsx` with dynamic micro-pulses for critical accounts.
-- **Prescribed Action:** Displays the top recommended retention action tailored to each account.
-- **CSV Export:** Generates an enriched CSV file with risk probabilities, risk levels, and top SHAP reasons for external CRM/marketing automation sync.
-
----
-
-### 7. Customer Deep-Dive & SHAP Explainability (`/customers/[id]`)
-
-![Customer Explainability Detail](docs/screenshots/07_customer_detail.png)
-
-#### Purpose:
-Individual account dossier revealing the exact mathematical factors driving a specific customer's churn risk.
-
-#### How It Works:
-- **SHAP (SHapley Additive exPlanations):** Calculates local feature importances using tree-based Shapley values:
-  $$\phi_i(x) = \sum_{S \subseteq F \setminus \{i\}} \frac{|S|!(|F| - |S| - 1)!}{|F|!} \left[ f_x(S \cup \{i\}) - f_x(S) \right]$$
-- **Human-Readable Reasons:** Converts mathematical SHAP weights into actionable sentences (e.g. `▲ Month-to-month contract increases risk`, `▼ Tenure > 24 months reduces risk`).
-- **Cohort Comparison:** Compares this customer's Monthly Charges and Tenure against median statistics of safe vs churned peers.
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/01_overview.png" alt="Overview"><br>
+      <b>Overview & Conversion Hub</b> (<code>/</code>)
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/02_upload.png" alt="Upload"><br>
+      <b>Dataset Ingestion & Validation</b> (<code>/upload</code>)
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/03_data_health.png" alt="Data Health"><br>
+      <b>Data Health & SMOTE Audit</b> (<code>/data-health</code>)
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/04_model_evaluation.png" alt="Model Evaluation"><br>
+      <b>Model Evaluation & Threshold Slider</b> (<code>/model</code>)
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/05_risk_radar.png" alt="Risk Radar"><br>
+      <b>Executive Risk Radar</b> (<code>/radar</code>)
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/06_customer_intelligence.png" alt="Customer Intelligence"><br>
+      <b>Customer Intelligence Table</b> (<code>/customers</code>)
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/07_customer_detail.png" alt="Customer Detail"><br>
+      <b>SHAP Customer Deep-Dive</b> (<code>/customers/[id]</code>)
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/08_simulator.png" alt="Simulator"><br>
+      <b>What-If Risk Simulator</b> (<code>/simulator</code>)
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/09_retention_playbook.png" alt="Playbook"><br>
+      <b>Retention Kanban Playbook</b> (<code>/playbook</code>)
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/10_settings.png" alt="Settings"><br>
+      <b>Settings & Data Export</b> (<code>/settings</code>)
+    </td>
+  </tr>
+</table>
 
 ---
 
-### 8. What-If Risk Simulator (`/simulator`)
+### 🧠 How It Works
 
-![What-If Risk Simulator](docs/screenshots/08_simulator.png)
-
-#### Purpose:
-Interactive experimentation sandbox allowing customer success managers to simulate changes to contracts, pricing, or service add-ons and immediately observe the effect on churn probability.
-
-#### How It Works:
-- **Real-Time Single Inference:** Collects 19 inputs (Contract, Payment Method, Tenure, Monthly Charges, Tech Support, Online Security, etc.) and issues a `POST /predict-one` request to FastAPI.
-- **Immediate Feedback Loop:** The server encodes features, executes XGBoost tree inference, and computes localized TreeSHAP values in milliseconds.
-- **History Trajectory:** Logs successive parameter tweaks in a session audit log so users can see how offering discounts or add-ons shifts probability downward.
-
----
-
-### 9. Retention Kanban Playbook (`/playbook`)
-
-![Retention Playbook Kanban](docs/screenshots/09_retention_playbook.png)
-
-#### Purpose:
-Operational workflow board organizing at-risk accounts into manageable intervention tiers with actionable playbooks.
-
-#### How It Works:
-- **Three Strategic Tiers:**
-  - 🔴 **High Risk (>65%):** Immediate 1-on-1 account executive outreach, contract restructuring, rate lock discounts.
-  - 🟡 **Medium Risk (35%-65%):** Targeted automated email sequences, feature adoption onboarding, complimentary add-on trials.
-  - 🟢 **Low Risk (<35%):** Standard loyalty nurturing and cross-sell campaigns.
-- **Task Management:** Interactive checkboxes track completed outreach with state persisted in browser storage.
-- **Segment Export:** Export individual lane CSVs directly to marketing platforms.
-
----
-
-### 10. System Configuration & Data Export (`/settings`)
-
-![System Settings & Data Management](docs/screenshots/10_settings.png)
-
-#### Purpose:
-System administration, backend connectivity diagnostics, global data reset, and complete dataset exports.
-
-#### How It Works:
-- **Health Checks:** Pings `http://localhost:8000/metrics` to verify backend uptime, response latency, and active model bundle version.
-- **Session Reset:** Clears local caches (`predictchurn-storage-v2`) to simulate fresh onboarding flows.
-- **Export Center:** Download raw evaluation metrics, test probabilities, and scored customer batches as JSON or CSV.
-
----
-
-## 🛠️ Tech Stack & Implementation Details
-
-| Layer | Component | Description |
-|---|---|---|
-| **Machine Learning** | `XGBoost 3.2` | Gradient boosted decision trees optimized for tabular churn classification. |
-| **Explainability** | `SHAP 0.54` | TreeExplainer computing exact Shapley feature attribution. |
-| **Data Resampling** | `imbalanced-learn` | SMOTE synthetic oversampling balancing minority churn class. |
-| **API Framework** | `FastAPI + Uvicorn` | Asynchronous REST service with Pydantic validation and CORS. |
-| **Frontend Framework** | `Next.js 14 (App Router)` | Modern React Server Components with client hydration. |
-| **Language** | `TypeScript (Strict)` | End-to-end typed API contracts and UI state. |
-| **State Management** | `Zustand` | Lightweight reactive store with `localStorage` persistence. |
-| **Styling** | `Tailwind CSS` | Custom token-driven design system with dark/light themes. |
-| **Testing** | `Vitest` | 16 unit tests verifying schema validation, metric recalculation, and formatters. |
-
----
-
-## 🚀 Getting Started
-
-### 1. Prerequisites
-- **Python 3.10+** (Python 3.14 compatible)
-- **Node.js 18+** & **npm**
-
-### 2. Backend Setup
-
-```bash
-cd predictchurn
-pip install -r requirements.txt
-
-# Train the model on the Telco dataset
-python train.py data/telco_training.csv
-
-# Launch the FastAPI server
-python -m uvicorn api:app --host 0.0.0.0 --port 8000
+```mermaid
+flowchart LR
+  A[CSV Upload] --> B[Data Cleaning]
+  B --> C[SMOTE Balancing]
+  C --> D[XGBoost Pipeline]
+  D --> E[SHAP TreeExplainer]
+  E --> F[Risk Radar & Table]
+  F --> G[Retention Playbook]
 ```
 
-### 3. Frontend Setup
+<details>
+<summary><b>Detailed Pipeline Specifications</b></summary>
+<br>
+
+- **Preprocessing & Balancing:** Median imputation for blank numeric charges, string quote-stripping, and SMOTE synthesis to correct the initial 73.5% Stay vs 26.5% Churn class imbalance.
+- **Model Training:** Stratified K-Fold XGBoost Classifier reaching 0.843 ROC-AUC and 77.29% accuracy on held-out test records.
+- **SHAP Attribution:** Local TreeSHAP decomposes predictions into marginal feature effects ($\phi_i$), mapped to human-readable drivers and prescriptive retention actions.
+- **Financial Risk Modeling:** Aggregates exposure using $\sum (\text{MonthlyCharges} \times 12)$ for all accounts crossing the active decision threshold.
+</details>
+
+---
+
+### 🧰 Tech Stack
+
+<div align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="45" height="45" alt="Next.js" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="45" height="45" alt="TypeScript" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="45" height="45" alt="React" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" width="45" height="45" alt="Tailwind" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="45" height="45" alt="Python" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" width="45" height="45" alt="FastAPI" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" width="45" height="45" alt="Scikit-Learn" />
+</div>
+
+<br>
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | Next.js 14 (App Router), TypeScript (Strict), Tailwind CSS ("Signal" Theme), Zustand |
+| **Backend & ML** | Python 3.10+, FastAPI, Uvicorn, XGBoost 3.x, SHAP 0.54, Imbalanced-Learn (SMOTE), Scikit-Learn |
+| **Testing & Tooling** | Vitest (16 unit tests), ESLint, Puppeteer-Core |
+
+```yaml
+dataset: "IBM Telco Customer Churn (OpenML #42178)"
+records: "7,043 customers, 20 feature columns"
+model: "XGBoost Classifier + SMOTE + TreeSHAP"
+metrics: "ROC-AUC 0.843 | Accuracy 77.29% | F1 0.618"
+design_system: "Signal (Paper #F4F1EA, Night Desk #0E0F0C)"
+```
+
+---
+
+### 🏗️ Architecture
+
+```
+customer-retention-system/
+├── app/                  # Next.js App Router (10 views, layouts, error boundaries)
+├── components/           # Reusable UI primitives & Signal layout components
+├── lib/                  # Typed API client, Zustand store, CSV parser & metrics
+├── predictchurn/         # FastAPI application, XGBoost pipeline & SHAP explainer
+│   ├── api.py            # REST endpoints (/train, /predict, /predict-one, /metrics)
+│   ├── churn_model.py    # Training logic, SMOTE oversampling & TreeSHAP
+│   └── data/             # Training and evaluation CSV datasets
+├── tests/                # Vitest unit test suite (16 tests)
+└── docs/screenshots/     # High-resolution application screenshots
+```
+
+---
+
+### 🚀 Quick Start
 
 ```bash
-# In the project root directory
+# 1. Clone the repository
+git clone https://github.com/FLASH11025/customer-retention-system.git
+cd customer-retention-system
+
+# 2. Start the Python Backend
+cd predictchurn
+pip install -r requirements.txt
+python train.py data/telco_training.csv
+python -m uvicorn api:app --host 0.0.0.0 --port 8000
+
+# 3. Start the Next.js Frontend (in a new terminal at project root)
+cd ..
+cp .env.local.example .env.local
 npm install
-npm run build
-npm start -- -p 3000
+npm run build && npm start -- -p 3000
 ```
 
 Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 🧪 Running Tests
+### 🧪 Testing
 
 ```bash
-# Run Vitest test suite
-npm test -- --run
-
-# Run TypeScript typecheck
-npm run typecheck
-
-# Run ESLint validation
-npm run lint
+npm test -- --run    # Run 16 Vitest unit tests (CSV, metrics, formatting)
+npm run typecheck    # Strict TypeScript type safety validation
+npm run lint         # ESLint code standards check
 ```
 
 ---
 
-## 📄 License
-MIT License. Built for real-world customer churn intelligence and revenue retention.
+### 🗺️ Roadmap
+
+- [ ] Docker & Docker-Compose one-command containerization
+- [ ] Role-based access control (RBAC) & OAuth2 user authentication
+- [ ] Bi-directional webhooks for HubSpot and Salesforce CRM synchronization
+- [ ] Automated recurring model retraining with data drift monitoring
+
+---
+
+### 🤝 Contributing
+
+Contributions are welcome! Please fork this repository, create a descriptive feature branch (`git checkout -b feat/your-feature`), commit your changes, and open a Pull Request.
+
+---
+
+### 📄 License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+### 📬 Contact
+
+<div align="center">
+  <a href="https://github.com/FLASH11025"><img src="https://img.shields.io/badge/GitHub-FLASH11025-181717?style=for-the-badge&logo=github" alt="GitHub" /></a>&nbsp;&nbsp;
+  <a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" /></a>&nbsp;&nbsp;
+  <a href="mailto:your.email@example.com"><img src="https://img.shields.io/badge/Email-Contact_Me-EA4335?style=for-the-badge&logo=gmail" alt="Email" /></a>
+</div>
+
+<br>
+
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer" width="100%"/>
+</div>
