@@ -1,0 +1,61 @@
+# ── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+ENV/
+*.pyo
+
+# ── ML artifacts (large binary files — retrain with train.py) ─
+predictchurn/models/*.pkl
+predictchurn/models/*.joblib
+
+# Keep the models/ folder itself
+!predictchurn/models/.gitkeep
+
+# ── Data files (large CSVs — download with OpenML) ───────────
+predictchurn/data/raw_telco.csv
+predictchurn/data/telco_training.csv
+predictchurn/data/predictions_output.csv
+
+# Keep small sample files (useful for demo / upload page)
+!predictchurn/data/telco_to_predict.csv
+!predictchurn/data/telco_sample_training.csv
+
+# ── Node / Next.js ────────────────────────────────────────────
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── Environment variables ─────────────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ── OS / Editor ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ── Temp / diagnostic scripts ─────────────────────────────────
+predictchurn/diag_startup.py
+predictchurn/test_startup.py
+*.log
+*.tmp

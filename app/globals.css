@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Signal Light Theme "Paper" */
+  --signal-bg: #F4F1EA;
+  --signal-surface: #FBFAF6;
+  --signal-surface-alt: #EFECE3;
+  --signal-ink: #14130F;
+  --signal-muted: #6B675C;
+  --signal-hairline: #DDD8CA;
+  --signal-hairline-subtle: #E8E4D8;
+
+  --signal-safe-bg: #E7F3EC;
+  --signal-watch-bg: #FCF4E4;
+  --signal-danger-bg: #FDECE9;
+
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', Courier New, monospace;
+}
+
+.dark {
+  /* Signal Dark Theme "Night Desk" */
+  --signal-bg: #0E0F0C;
+  --signal-surface: #171814;
+  --signal-surface-alt: #1F201B;
+  --signal-ink: #F1EFE6;
+  --signal-muted: #8F8B7D;
+  --signal-hairline: #2A2B25;
+  --signal-hairline-subtle: #20211B;
+
+  --signal-safe-bg: #14291B;
+  --signal-watch-bg: #2C210A;
+  --signal-danger-bg: #2E1513;
+}
+
+/* Base Body Styles */
+body {
+  background-color: var(--signal-bg);
+  color: var(--signal-ink);
+  font-family: var(--font-ui);
+  letter-spacing: -0.015em;
+  min-height: 100vh;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+  overflow-x: hidden;
+}
+
+/* Subtle grain texture overlay */
+.bg-grain {
+  background-image: radial-gradient(rgba(20, 19, 15, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+.dark .bg-grain {
+  background-image: radial-gradient(rgba(241, 239, 230, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Linear blueprint grid for heroes */
+.hero-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, var(--signal-hairline-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--signal-hairline-subtle) 1px, transparent 1px);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--signal-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--signal-hairline);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--signal-muted);
+}
+
+/* Tabular Numerals for Monospace elements */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus styles matching Signal Electric Lime */
+*:focus-visible {
+  outline: 2px solid #C6F432;
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
